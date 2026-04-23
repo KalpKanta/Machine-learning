@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 
 car = pd.read_csv("car.data")
 car.columns = ("sales", "maintainance", "doors", "persons", "boot_space", "safety", "class")
-
+    
 print(car.isnull().sum())
 
 print(car.info())
