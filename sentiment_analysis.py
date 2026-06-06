@@ -30,3 +30,23 @@ def text_transformation(data):
         new_item = re.sub("[^a-zA-Z]", " ", str())
         new_item = new_item.lower()
         new_item = new_item.split()
+        new_item = [lm.lemmatize(word) for word in new_item if word not in set(stopwords.words("english"))]
+        corpus.append(" ".join(str(x) for x in new_item))
+    return corpus
+#feature extraction (bag of words)
+corpus = text_transformation(train["text"])
+print(corpus[1])
+
+from sklearn.feature_extraction.text import CountVectorizer
+
+cv = CountVectorizer(ngram_range = (1,2))
+#model + hyper parameter tuning
+from sklearn.model_selection import GreatSearchCV
+from sklearn.ensemble import RandomForestClassifier
+parameters = {
+    "max_features" : ("auto", "sqrt"),
+    "n_estimators" : [500,1000,1500], 
+    "max_depth" : [5, 10, None],
+    "min_samples_leaf" : [1,2,5,10],
+    "bootstrap" : [True, False]
+}
