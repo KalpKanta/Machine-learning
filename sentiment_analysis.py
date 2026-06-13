@@ -40,8 +40,10 @@ print(corpus[1])
 from sklearn.feature_extraction.text import CountVectorizer
 
 cv = CountVectorizer(ngram_range = (1,2))
+X = cv.fit_transform(corpus)
+y = train.label
 #model + hyper parameter tuning
-from sklearn.model_selection import GreatSearchCV
+from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 parameters = {
     "max_features" : ("auto", "sqrt"),
@@ -50,3 +52,10 @@ parameters = {
     "min_samples_leaf" : [1,2,5,10],
     "bootstrap" : [True, False]
 }
+
+
+from sklearn.model_selection import GridSearchCV
+search_cv = GridSearchCV(RandomForestClassifier(), parameters, cv = 5, return_train_score = True, n_jobs = -1)
+search_cv.fit(X,y)
+
+print(search_cv.best_params_)
