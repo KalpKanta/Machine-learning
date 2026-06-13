@@ -27,7 +27,7 @@ lm = WordNetLemmatizer()
 def text_transformation(data):
     corpus = []
     for sentence in data:
-        new_item = re.sub("[^a-zA-Z]", " ", str())
+        new_item = re.sub("[^a-zA-Z]", " ", str(sentence))
         new_item = new_item.lower()
         new_item = new_item.split()
         new_item = [lm.lemmatize(word) for word in new_item if word not in set(stopwords.words("english"))]
@@ -59,3 +59,18 @@ search_cv = GridSearchCV(RandomForestClassifier(), parameters, cv = 5, return_tr
 search_cv.fit(X,y)
 
 print(search_cv.best_params_)
+
+
+rfc = RandomForestClassifier(max_features = search_cv.best_params_["max_features"],
+ max_depth = search_cv.best_params_["max_depth"],
+ n_estimaters = search_cv.best_params_["n_estimaters"], 
+ min_samples_leaf = search_cv.best_params_["min_samples_leaf"], 
+ bootstrap = search_cv.best_params_["bootstrap"])
+
+rfc.fit(X, y)
+test_data = pd.read_csv("test.txt", delimiter = ";", names = ["text, label"])
+x_test = test_data.text
+y_test = test_data.label
+custom_encoder(y_test)
+x_test = text_transformation(x_test)
+x_text = cv.transform(x_test)
