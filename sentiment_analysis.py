@@ -46,7 +46,7 @@ y = train.label
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 parameters = {
-    "max_features" : ("auto", "sqrt"),
+    "max_features" : ("sqrt"),
     "n_estimators" : [500,1000,1500], 
     "max_depth" : [5, 10, None],
     "min_samples_leaf" : [1,2,5,10],
@@ -63,12 +63,12 @@ print(search_cv.best_params_)
 
 rfc = RandomForestClassifier(max_features = search_cv.best_params_["max_features"],
  max_depth = search_cv.best_params_["max_depth"],
- n_estimaters = search_cv.best_params_["n_estimaters"], 
+ n_estimators = search_cv.best_params_["n_estimators"], 
  min_samples_leaf = search_cv.best_params_["min_samples_leaf"], 
  bootstrap = search_cv.best_params_["bootstrap"])
 
 rfc.fit(X, y)
-test_data = pd.read_csv("test.txt", delimiter = ";", names = ["text, label"])
+test_data = pd.read_csv("test.txt", delimiter = ";", names = ["text", "label"])
 x_test = test_data.text
 y_test = test_data.label
 custom_encoder(y_test)
@@ -76,7 +76,7 @@ x_test = text_transformation(x_test)
 x_text = cv.transform(x_test)
 
 y_predict = rfc.predict(x_test)
-from sklearn.metrics import accuracy_score, comfusion_matrix, classification_report
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 a_s = accuracy_score(y_test, y_predict)
 print("Accuracy score = ", a_s)
 
@@ -95,10 +95,10 @@ def expression_check(input_str):
 def sentiment_predictor(input):
     input_str = text_transformation(input)
     transform_text = cv.transform(input_str)
-    prediction = rst.predict(transform_text)
+    prediction = rfc.predict(transform_text)
     expression_check(prediction)
 
 input_1 = ["I am going to the shops with my freinds tommorow!"]
 imput_2 = ["Sometimes i want to punch someone."]
 sentiment_predictor(input_1)
-sentiment_predictor(input_2q)
+sentiment_predictor(input_2)
