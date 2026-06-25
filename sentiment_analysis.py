@@ -74,3 +74,31 @@ y_test = test_data.label
 custom_encoder(y_test)
 x_test = text_transformation(x_test)
 x_text = cv.transform(x_test)
+
+y_predict = rfc.predict(x_test)
+from sklearn.metrics import accuracy_score, comfusion_matrix, classification_report
+a_s = accuracy_score(y_test, y_predict)
+print("Accuracy score = ", a_s)
+
+cr = classification_report(y_test, y_predict)
+print("Classification report = ", cr)
+
+def expression_check(input_str):
+    if input_str == 1:
+        print("input statement has positive sentiment")
+    elif input_str == 0:
+        print("input statement has negative sentiment")
+    else:
+        print("invalid output")
+    
+
+def sentiment_predictor(input):
+    input_str = text_transformation(input)
+    transform_text = cv.transform(input_str)
+    prediction = rst.predict(transform_text)
+    expression_check(prediction)
+
+input_1 = ["I am going to the shops with my freinds tommorow!"]
+imput_2 = ["Sometimes i want to punch someone."]
+sentiment_predictor(input_1)
+sentiment_predictor(input_2q)
